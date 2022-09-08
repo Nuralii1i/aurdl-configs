@@ -1,0 +1,13 @@
+domin=`echo $2 | cut -f3 -d'/'`;
+others=`echo $2 | cut -f4- -d'/'`;
+case "$domin" in 
+    "github.com")
+    url="https://ay1.us/https://github.com/"$others;
+    ;;
+    *)
+    url=$2;
+    ;;
+esac
+
+echo "download from $url\n";
+/usr/bin/curl -gqb "" -fLC - --retry 3 --retry-delay 3 -o $1 $url;
