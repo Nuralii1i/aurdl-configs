@@ -1,6 +1,6 @@
-##/bin/bash
+## /bin/bash
 
-##aurldl
+## aurldl
 
 domin=`echo $2 | cut -f3 -d'/'`;
 others=`echo $2 | cut -f4- -d'/'`;
