@@ -1,36 +1,34 @@
 
 # aurdl-configs
 
-#### 介绍
+#### Introduction
 
-众所都周知，国内Github用起来很麻烦
+This whole repository is for resolving AUR-fetching-problems in China.
+Using a simple reversed proxy server for Github to get source code.
 
-众所都又周知，aur里的构建脚本大多指向Github
+`aurdl.sh` is a simple script that can recognize source url which is contained in PKGBUILD file;
 
-众所都再周知，不是每个人都能挂上七根木棍畅游互联网世界（比如我）
+`makepkg.conf.bak` is original config file for ArchLinux;
 
-于是有了此仓库
+`makepkg.conf` is my own config file for ArchLinux.
 
-#### 文件说明
+#### Usage
 
-仓库有三个文件
-1. makepkg.conf：是我修改过的版本，主要改了dlagent的https协议下载器
-2. makepkg.conf.bak：Archlinux原版makepkg.conf文件
-3. aurdl：替换GitHub链接的脚本文件
+Find or build a reversed proxy for yourself first
 
+Edit `aurdl.sh` to put your proxy url in that file
 
-#### 安装教程
+Put your `aurdl.sh` somewhere,like `/home/$USER`,rename it to what you like
 
-1.  克隆此仓库
-2.  将aurdl脚本复制到你想要存放的目录，并且sudo chmod +x aurdl
-3.  将makepkg.conf文件存放至/etc目录，替换原有文件
-4.  用编辑器打开makepkg.conf文件并将字段/path/to/aurdl替换为你的路径（必须是完整路径，如/home/username/aurdl）
-5.  可自行编辑脚本文件，以替换自己喜欢的镜像站url或者反代服务器
+Edit your `/etc/makepkg.conf` file to like this:
 
-#### 使用说明
-
-皇帝的新说明！
-
-#### 特别说明
-
-脚本修改自[知乎专栏](https://zhuanlan.zhihu.com/p/176987140)的脚本
+```
+#-- The download utilities that makepkg should use to acquire sources
+#  Format: 'protocol::agent'
+DLAGENTS=('file::/usr/bin/curl -qgC - -o %o %u'
+          'ftp::/usr/bin/curl -qgfC - --ftp-pasv --retry 3 --retry-delay 3 -o %o %u'
+          'http::/usr/bin/curl -qgb "" -fLC - --retry 3 --retry-delay 3 -o %o %u'
+          'https::/PATH/TO/YOUR_SCRIPT %o %u'  ------------------------------------------EDIT THIS LINE LIKE I DID!!
+          'rsync::/usr/bin/rsync --no-motd -z %u %o'
+          'scp::/usr/bin/scp -C %u %o')
+```
